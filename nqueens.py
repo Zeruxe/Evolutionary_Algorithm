@@ -1,4 +1,5 @@
 import random
+from timeit import default_timer as timer
 
 class Board:
     board: list
@@ -54,17 +55,17 @@ def survival_off_the_fittest(population):
     selection_number1 = random.random()
     selection_number2 = random.random()
 
-    p1, p1 = None, None
+    p1, p2 = None, None
 
     for i, probability in enumerate(population):
-        if selection_number1 <= population.probability:
+        if selection_number1 <= probability:
             p1 = population[i]
             break
         selection_number1 -= probability
 
     # Same loop but we make sure to not pick the same board again.
     for j, probability in enumerate(population):
-        if selection_number2 <= population.probability:
+        if selection_number2 <= probability:
             if p1 == population[j]:
                 if j > 0:
                     p2 = population[j - 1]
@@ -73,12 +74,13 @@ def survival_off_the_fittest(population):
             else:
                 p2 = population[j]
             break
-        selection_number2 -= population.probability
+        selection_number2 -= probability
 
-    return (p1, p2)
+    return p1, p2
 
 
 # Function that lowers the mutation_rate untill a set lower bound rate
+# OBS maybe change this to adaptive decay in the future
 def mutation_rate_decay():
     if mutation_rate > 0.01:
         mutation_rate -= 0.01
@@ -96,6 +98,71 @@ def fitness_probability(population):
     population.sort(key=population.boardfitness, reverse=True)
 
 
+
+def evolutionary_algorithm():
+    start = timer()
+
+    max_fitness = n * (n - 1) // 2
+    population = []
+
+    for _ in range(population_size):
+        curboard = Board()
+        curboard.board = generate_board(n)
+        population.append(curboard)
+
+    for gen in range(max_generations):
+        fitness_probability(population)
+
+        if population[0].boardfitness == max_fitness:
+            print(f"Max fitness has been reached! {population[0].board}")
+            break
+
+        new_population = population[:elites]
+
+        while len(new_population) < population_size:
+            p1, p2 = survival_off_the_fittest(population)
+            cutoff = random.randint(1, n - 1)
+            c1 = crossover(p1, p2, cutoff)
+            if random.random() <= mutation_rate:
+                c1 = mutate(c1)
+            new_population.append(c1)
+
+            c2 = crossover(p2, p1, cutoff)
+            if random.random() <= mutation_rate:
+                c2 = mutate(c2)
+            new_population.append(c2)
+
+        mutation_rate_decay()
+
+    end = timer()
+    return end - start
+
+
 def main():
+    for board_size, pop_size, generations, mutate, elite_count in parameters:
+        n = board_size
+        population_size = pop_size
+        max_generations = generations
+        mutation_rate = mutate
+        elites = elite_count
+
+        total_elapsed = 0
+        for _ in range(25):
+            total_elapsed += evolutionary_algorithm()
+
+        with open("Result.txt", "a") as f:
+            f.write(f"Using - N = {n} - pop_size = {population_size} - max_generations = {max_generations} - mutation_start_rate = {mutate} - elites = {elites}")
+            f.write(f"Took a average of {total_elapsed / 25} Seconds")
 
     return
+
+
+# Our values that we want to test in our simulation
+#            [n, population_size, max_generations, mutation_rate, elites]
+parameters = [[20, 100, 5000, 0.2, 10], 
+              [20, 250, 5000, 0.2, 10],
+              [20, 500, 5000, 0.2, 10],
+              [20, 1000, 5000, 0.2, 10],
+              [20, 2000, 5000, 0.2, 10]]
+
+main()
