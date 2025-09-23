@@ -16,7 +16,7 @@ elites = 2              # How many elites we want to save into the new generatio
 # This gives a board state that can't have two queens on the same row or column meaning our only condition breaks
 # are if the queens colide on a diagonal. Meaning the initial fitness score will be rather high (most likely).
 def generate_board(N):
-    return random.Shuffle([x for x in range(N)])
+    return random.sample(range(N), N)
 
 
 # A function that given one of our boards. It returns the current fitness_score of that board.
@@ -37,14 +37,14 @@ def fitness(board):
 
 # Function that combines two parents (two different boards) into a child (a new board state).
 def crossover(parent_1, parent_2, cut_off):
-    return parent_1[:cut_off] + parent_2[cut_off:]
+    return parent_1.board[:cut_off] + parent_2.board[cut_off:]
 
 
 # Function that given a board state there is a random chance to swap a queen from a random column into a new row.
 def mutate(board):
     if random.random() < mutation_rate:
-        column = random.randint(n)
-        newrow = random.randint(n)
+        column = random.randint(0, n - 1)
+        newrow = random.randint(0, n - 1)
         board[column] = newrow
     return board
 
@@ -57,15 +57,15 @@ def survival_off_the_fittest(population):
 
     p1, p2 = None, None
 
-    for i, probability in enumerate(population):
-        if selection_number1 <= probability:
+    for i, curboard in enumerate(population):
+        if selection_number1 <= curboard.probability:
             p1 = population[i]
             break
-        selection_number1 -= probability
+        selection_number1 -= curboard.probability
 
     # Same loop but we make sure to not pick the same board again.
-    for j, probability in enumerate(population):
-        if selection_number2 <= probability:
+    for j, curboard in enumerate(population):
+        if selection_number2 <= curboard.probability:
             if p1 == population[j]:
                 if j > 0:
                     p2 = population[j - 1]
@@ -74,7 +74,7 @@ def survival_off_the_fittest(population):
             else:
                 p2 = population[j]
             break
-        selection_number2 -= probability
+        selection_number2 -= curboard.probability
 
     return p1, p2
 
@@ -82,6 +82,7 @@ def survival_off_the_fittest(population):
 # Function that lowers the mutation_rate untill a set lower bound rate
 # OBS maybe change this to adaptive decay in the future
 def mutation_rate_decay():
+    global mutation_rate
     if mutation_rate > 0.01:
         mutation_rate -= 0.01
 
@@ -93,9 +94,9 @@ def fitness_probability(population):
         curboard.boardfitness = fitness(curboard.board)
         total_fitness += curboard.boardfitness
     for curboard in population:
-        current_probability = curboard.boardfitness / total_fitness
+        curboard.probability = curboard.boardfitness / total_fitness
 
-    population.sort(key=population.boardfitness, reverse=True)
+    population.sort(key=lambda x: x.boardfitness, reverse=True)
 
 
 
@@ -139,6 +140,8 @@ def evolutionary_algorithm():
 
 
 def main():
+    open("Result.txt", "w").close()
+
     for board_size, pop_size, generations, mutate, elite_count in parameters:
         n = board_size
         population_size = pop_size
@@ -147,22 +150,29 @@ def main():
         elites = elite_count
 
         total_elapsed = 0
-        for _ in range(25):
+
+        print(f"Starting simulation Using - N = {n} - pop_size = {population_size} - max_generations = {max_generations} - mutation_start_rate = {mutate} - elites = {elites}")
+
+        for i in range(25):
             total_elapsed += evolutionary_algorithm()
+            print(f"Simuation {i + 1} finished!")
 
         with open("Result.txt", "a") as f:
-            f.write(f"Using - N = {n} - pop_size = {population_size} - max_generations = {max_generations} - mutation_start_rate = {mutate} - elites = {elites}")
-            f.write(f"Took a average of {total_elapsed / 25} Seconds")
+            f.write(f"Using - N = {n} - pop_size = {population_size} - max_generations = {max_generations} - mutation_start_rate = {mutate} - elites = {elites}\n")
+            f.write(f"Took a average of {total_elapsed / 25} Seconds\n\n")
 
     return
 
 
 # Our values that we want to test in our simulation
+# It will then run 25 simulations on the given parameters and print some (pretty bad output to a file)
 #            [n, population_size, max_generations, mutation_rate, elites]
-parameters = [[20, 100, 5000, 0.2, 10], 
-              [20, 250, 5000, 0.2, 10],
-              [20, 500, 5000, 0.2, 10],
-              [20, 1000, 5000, 0.2, 10],
-              [20, 2000, 5000, 0.2, 10]]
+parameters = [[8, 100, 5000, 0.2, 10], 
+              [8, 250, 5000, 0.2, 10],
+              [8, 500, 5000, 0.2, 10],
+              [8, 1000, 5000, 0.2, 10],
+              [8, 2000, 5000, 0.2, 10],
+              [8, 5000, 5000, 0.2, 10],
+              [8, 10000, 5000, 0.2, 10]]
 
 main()
