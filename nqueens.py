@@ -151,8 +151,7 @@ def evolutionary_algorithm():
 
         mutation_rate_decay()
 
-        if gen == 2:
-            return 1
+        #if gen == 2: return 1
 
     end = timer()
     return end - start
@@ -178,13 +177,13 @@ def main():
 
         print(f"Starting simulation Using - N = {n} - pop_size = {population_size} - max_generations = {max_generations} - mutation_start_rate = {mutate} - elites = {elites}")
 
-        for i in range(5):
+        for i in range(1):
             total_elapsed += evolutionary_algorithm()
             print(f"Simuation {i + 1} finished!")
 
         with open("Result.txt", "a") as f:
             f.write(f"Using - N = {n} - pop_size = {population_size} - max_generations = {max_generations} - mutation_start_rate = {mutate} - elites = {elites}\n")
-            f.write(f"Took a average of {total_elapsed / 5} Seconds\n\n")
+            f.write(f"Took a average of {total_elapsed / 1} Seconds\n\n")
 
     return
 
@@ -192,7 +191,7 @@ def main():
 # Our values that we want to test in our simulation
 # It will then run 25 simulations on the given parameters and print some (pretty bad output to a file)
 #            [n, population_size, max_generations, mutation_rate, elites]
-parameters = [[8, 6, 5000, 0.1, 2]
+parameters = [[8, 6, 5000, 0.05, 2]
               #[8, 100, 5000, 0.2, 10], 
               #[8, 250, 5000, 0.2, 10],
               #[8, 500, 5000, 0.2, 10],
