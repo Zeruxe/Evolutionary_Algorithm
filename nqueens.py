@@ -231,4 +231,5 @@ parameters = [
             [100, 200, 1500, 0.2, 6],
             ]
 
-main()
+if __name__ == "__main__": 
+    main()
