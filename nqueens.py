@@ -1,7 +1,13 @@
 import random
 from timeit import default_timer as timer
+from collections import Counter
 
 class Board:
+    def __init__(self, board=None):
+        self.board = board
+        self.boardfitness = None
+        self.probability = 0
+
     board: list
     boardfitness: int
     probability: float
@@ -22,33 +28,66 @@ def generate_board(N):
 # A function that given one of our boards. It returns the current fitness_score of that board.
 # The fitness score is how many queens that do not conflict with eachother.
 def fitness(board):
-    fitness_score = n * (n - 1) // 2
+    n = len(board)
+    max_fitness = n * (n - 1) // 2
 
-    for i in range(n):
-        for j in range(i + 1, n):
-            if abs(board[i] - board[j]) == j - i: # Same diagonal
-                fitness_score -= 1
-            elif (board[i] == board[j]): # Same row
-                fitness_score -= 1
-    return fitness_score
+    diag1 = Counter()
+    diag2 = Counter()
+
+    for col, row in enumerate(board):
+        diag1[row - col] += 1
+        diag2[row + col] += 1
+
+    for v in diag1.values():
+        max_fitness -= v * (v - 1) // 2
+    for v in diag2.values():
+        max_fitness -= v * (v - 1) // 2
+
+    return max_fitness
 
 
 # Function that combines two parents (two different boards) into a child (a new board state).
-def crossover(parent_1, parent_2, cut_off):
-    return parent_1.board[:cut_off] + parent_2.board[cut_off:]
+def crossover(parent_1, parent_2):
+    newchild = [None] * n
+
+    i = random.randint(0, n - 2)
+    j = random.randint(i + 1, n - 1)
+
+    newchild[i:j + 1] = parent_1.board[i:j + 1]
+
+    index = 0
+    for queen in parent_2.board:
+        if queen in newchild:
+            continue
+        while newchild[index] != None:
+            index += 1
+        newchild[index] = queen
+
+    return newchild
 
 
 # Function that given a board state there is a random chance to swap a queen from a random column into a new row.
 def mutate(curboard):
-    column = random.randint(0, n - 1)
-    newrow = random.randint(0, n - 1)
-    curboard.board[column] = newrow
+    column1 = random.randint(0, n - 1)
+    column2 = random.randint(0, n - 1)
+    curboard.board[column1], curboard.board[column2] = curboard.board[column2], curboard.board[column1]
     return curboard
 
 
 # Given our entire board state, we return a pair of two boards that should be used to create two new boards.
 # We make sure to not pick the same board twice.
-def survival_off_the_fittest(population):
+def survival_off_the_fittest(population, k=3):
+    # Sista verisionen verkar vara snabbast. Blir lixom ingen vikt i valen så de går väldigt snabbt
+    candidates = random.sample(population, k)
+    p1 = max(candidates, key=lambda b: b.boardfitness)
+    candidates = random.sample(population, k)
+    p2 = max(candidates, key=lambda b: b.boardfitness)
+    return p1, p2
+
+    # Testade detta som är samma sak men inbyggd i C
+    return random.choices(population, weights=[b.boardfitness for b in population], k=2)
+
+    # Vår första lösning den suger och är för sölig
     selection_number1 = random.random()
     selection_number2 = random.random()
 
@@ -80,8 +119,7 @@ def survival_off_the_fittest(population):
 # OBS maybe change this to adaptive decay in the future
 def mutation_rate_decay():
     global mutation_rate
-    if mutation_rate > 0.01:
-        mutation_rate -= 0.01
+    mutation_rate = max(0.05, mutation_rate * 0.99)
 
 
 def fitness_probability(population):
@@ -104,8 +142,6 @@ def evolutionary_algorithm():
     global mutation_rate
     global elites
 
-    start = timer()
-
     max_fitness = n * (n - 1) // 2
     population = []
 
@@ -117,44 +153,25 @@ def evolutionary_algorithm():
     for gen in range(max_generations):
         fitness_probability(population)
 
-        print(max_fitness, population[0].boardfitness, population[0].board)
-
         if population[0].boardfitness == max_fitness:
             print(f"Max fitness has been reached! {population[0].board}")
+            return True
             break
 
         new_population = population[:elites]
 
         while len(new_population) < population_size:
             p1, p2 = survival_off_the_fittest(population)
-            cutoff = random.randint(1, n - 1)
-            c1 = Board()
-            c1.board = crossover(p1, p2, cutoff)
+            c1 = Board(crossover(p1, p2))
             if random.random() <= mutation_rate:
-                c1 = mutate(c1)
+                mutate(c1)
 
             new_population.append(c1)
 
-            c2 = Board()
-            c2.board = crossover(p2, p1, cutoff)
-            if random.random() <= mutation_rate:
-                c2 = mutate(c2)
-            new_population.append(c2)
-
-        print("Before", len(population))
-        for pop in population:
-            print(pop.board, pop.boardfitness)
         population = new_population
-        print("After", len(population))
-        for pop in population:
-            print(pop.board)
-
         mutation_rate_decay()
 
-        #if gen == 2: return 1
-
-    end = timer()
-    return end - start
+    return False
 
 
 def main():
@@ -173,17 +190,25 @@ def main():
         mutation_rate = mutate
         elites = elite_count
 
-        total_elapsed = 0
-
         print(f"Starting simulation Using - N = {n} - pop_size = {population_size} - max_generations = {max_generations} - mutation_start_rate = {mutate} - elites = {elites}")
 
-        for i in range(1):
-            total_elapsed += evolutionary_algorithm()
+        total_elapsed = 0
+        total_successful = 0
+
+        for i in range(25):
+            start = timer()
+
+            if evolutionary_algorithm():
+                total_successful += 1
+
+            end = timer()
+
+            total_elapsed += end - start
             print(f"Simuation {i + 1} finished!")
 
         with open("Result.txt", "a") as f:
             f.write(f"Using - N = {n} - pop_size = {population_size} - max_generations = {max_generations} - mutation_start_rate = {mutate} - elites = {elites}\n")
-            f.write(f"Took a average of {total_elapsed / 1} Seconds\n\n")
+            f.write(f"Took a average of {total_elapsed / 25} Seconds with {total_successful} perfect runs!\n\n")
 
     return
 
@@ -191,14 +216,19 @@ def main():
 # Our values that we want to test in our simulation
 # It will then run 25 simulations on the given parameters and print some (pretty bad output to a file)
 #            [n, population_size, max_generations, mutation_rate, elites]
-parameters = [[8, 6, 5000, 0.05, 2]
-              #[8, 100, 5000, 0.2, 10], 
-              #[8, 250, 5000, 0.2, 10],
-              #[8, 500, 5000, 0.2, 10],
-              #[8, 1000, 5000, 0.2, 10],
-              #[8, 2000, 5000, 0.2, 10],
-              #[8, 5000, 5000, 0.2, 10],
-              #[8, 10000, 5000, 0.2, 10]
-              ]
+parameters = [
+            # Litet bräde
+            [15, 50, 500, 0.2, 2],
+            [15, 100, 500, 0.2, 2],
+            [15, 100, 500, 0.1, 2],
+            [15, 100, 500, 0.3, 2],
+
+            # Mellan bräde
+            [50, 100, 1000, 0.2, 4],
+            [50, 200, 1000, 0.2, 4],
+
+            # Stort bräde
+            [100, 200, 1500, 0.2, 6],
+            ]
 
 main()
