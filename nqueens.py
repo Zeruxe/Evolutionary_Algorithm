@@ -6,11 +6,11 @@ class Board:
     boardfitness: int
     probability: float
 
-n = 8                   # Number of queens or the size of the board
-population_size = 100   # This is the starting population size
-max_generations = 5000  # Max generations untill we stop the simulation and accept the solution we got
-mutation_rate = 0.20    # Start mutation rate (will end on 1% - 5% roughly)
-elites = 2              # How many elites we want to save into the new generation
+global n                # Number of queens or the size of the board
+global population_size  # This is the starting population size
+global max_generations  # Max generations untill we stop the simulation and accept the solution we got
+global mutation_rate    # Start mutation rate (will end on 1% - 5% roughly)
+global elites           # How many elites we want to save into the new generation
 
 # Generates a new random board state depending on the size N of the board with N queens.
 # This gives a board state that can't have two queens on the same row or column meaning our only condition breaks
@@ -28,9 +28,7 @@ def fitness(board):
         for j in range(i + 1, n):
             if abs(board[i] - board[j]) == j - i: # Same diagonal
                 fitness_score -= 1
-            elif (i == board[j]): # Same row
-                fitness_score -= 1
-            elif (board[i] == j): # Same Column
+            elif (board[i] == board[j]): # Same row
                 fitness_score -= 1
     return fitness_score
 
@@ -100,6 +98,12 @@ def fitness_probability(population):
 
 
 def evolutionary_algorithm():
+    global n
+    global population_size
+    global max_generations
+    global mutation_rate
+    global elites
+
     start = timer()
 
     max_fitness = n * (n - 1) // 2
@@ -137,15 +141,30 @@ def evolutionary_algorithm():
                 c2 = mutate(c2)
             new_population.append(c2)
 
+        print("Before", len(population))
+        for pop in population:
+            print(pop.board, pop.boardfitness)
         population = new_population
+        print("After", len(population))
+        for pop in population:
+            print(pop.board)
 
         mutation_rate_decay()
+
+        if gen == 2:
+            return 1
 
     end = timer()
     return end - start
 
 
 def main():
+    global n
+    global population_size
+    global max_generations
+    global mutation_rate
+    global elites
+
     open("Result.txt", "w").close()
 
     for board_size, pop_size, generations, mutate, elite_count in parameters:
@@ -173,7 +192,7 @@ def main():
 # Our values that we want to test in our simulation
 # It will then run 25 simulations on the given parameters and print some (pretty bad output to a file)
 #            [n, population_size, max_generations, mutation_rate, elites]
-parameters = [[8, 20, 5000, 0.1, 2]
+parameters = [[8, 6, 5000, 0.1, 2]
               #[8, 100, 5000, 0.2, 10], 
               #[8, 250, 5000, 0.2, 10],
               #[8, 500, 5000, 0.2, 10],

@@ -1,0 +1,3 @@
+Using - N = 8 - pop_size = 6 - max_generations = 5000 - mutation_start_rate = 0.1 - elites = 2
+Took a average of 1.0 Seconds
+
