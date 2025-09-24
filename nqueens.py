@@ -41,12 +41,11 @@ def crossover(parent_1, parent_2, cut_off):
 
 
 # Function that given a board state there is a random chance to swap a queen from a random column into a new row.
-def mutate(board):
-    if random.random() < mutation_rate:
-        column = random.randint(0, n - 1)
-        newrow = random.randint(0, n - 1)
-        board[column] = newrow
-    return board
+def mutate(curboard):
+    column = random.randint(0, n - 1)
+    newrow = random.randint(0, n - 1)
+    curboard.board[column] = newrow
+    return curboard
 
 
 # Given our entire board state, we return a pair of two boards that should be used to create two new boards.
@@ -114,6 +113,8 @@ def evolutionary_algorithm():
     for gen in range(max_generations):
         fitness_probability(population)
 
+        print(max_fitness, population[0].boardfitness, population[0].board)
+
         if population[0].boardfitness == max_fitness:
             print(f"Max fitness has been reached! {population[0].board}")
             break
@@ -123,15 +124,20 @@ def evolutionary_algorithm():
         while len(new_population) < population_size:
             p1, p2 = survival_off_the_fittest(population)
             cutoff = random.randint(1, n - 1)
-            c1 = crossover(p1, p2, cutoff)
+            c1 = Board()
+            c1.board = crossover(p1, p2, cutoff)
             if random.random() <= mutation_rate:
                 c1 = mutate(c1)
+
             new_population.append(c1)
 
-            c2 = crossover(p2, p1, cutoff)
+            c2 = Board()
+            c2.board = crossover(p2, p1, cutoff)
             if random.random() <= mutation_rate:
                 c2 = mutate(c2)
             new_population.append(c2)
+
+        population = new_population
 
         mutation_rate_decay()
 
@@ -153,13 +159,13 @@ def main():
 
         print(f"Starting simulation Using - N = {n} - pop_size = {population_size} - max_generations = {max_generations} - mutation_start_rate = {mutate} - elites = {elites}")
 
-        for i in range(25):
+        for i in range(5):
             total_elapsed += evolutionary_algorithm()
             print(f"Simuation {i + 1} finished!")
 
         with open("Result.txt", "a") as f:
             f.write(f"Using - N = {n} - pop_size = {population_size} - max_generations = {max_generations} - mutation_start_rate = {mutate} - elites = {elites}\n")
-            f.write(f"Took a average of {total_elapsed / 25} Seconds\n\n")
+            f.write(f"Took a average of {total_elapsed / 5} Seconds\n\n")
 
     return
 
@@ -167,12 +173,14 @@ def main():
 # Our values that we want to test in our simulation
 # It will then run 25 simulations on the given parameters and print some (pretty bad output to a file)
 #            [n, population_size, max_generations, mutation_rate, elites]
-parameters = [[8, 100, 5000, 0.2, 10], 
-              [8, 250, 5000, 0.2, 10],
-              [8, 500, 5000, 0.2, 10],
-              [8, 1000, 5000, 0.2, 10],
-              [8, 2000, 5000, 0.2, 10],
-              [8, 5000, 5000, 0.2, 10],
-              [8, 10000, 5000, 0.2, 10]]
+parameters = [[8, 20, 5000, 0.1, 2]
+              #[8, 100, 5000, 0.2, 10], 
+              #[8, 250, 5000, 0.2, 10],
+              #[8, 500, 5000, 0.2, 10],
+              #[8, 1000, 5000, 0.2, 10],
+              #[8, 2000, 5000, 0.2, 10],
+              #[8, 5000, 5000, 0.2, 10],
+              #[8, 10000, 5000, 0.2, 10]
+              ]
 
 main()
