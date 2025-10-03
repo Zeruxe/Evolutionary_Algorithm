@@ -1,5 +1,7 @@
 import random
 import nqueens
+from timeit import default_timer as timer
+from collections import Counter
 
 backtracking_limit = 1000000
 current_backtracks = 0
@@ -39,23 +41,56 @@ def placequeens(col, board):
                 print("Final board state:")
                 print(board)
                 return False
+
     return False
 
 
+def backtrack_alg(n):
 
-def main():
+    global current_backtracks
+    current_backtracks = 0
 
-    n = int(input())
-
+    print(f"Calling backtrack_alg with n={n}")  # Debug print
     new_board = nqueens.Board()
     new_board.board = [-1 for i in range(n)]
 
     if (placequeens(0, new_board.board)):
         print(new_board.board)
+        return True
     else:
         print("No Solution found within backtracking limit")
         print("Final board state:")
         print(new_board.board)
+        return False
+
+
+def main():
+
+    # Try different problemsizes n
+    parameters = [4, 8, 10, 12, 15, 17, 20]
+
+    open("BackTracking_Result.txt", "w").close()   
+
+    time_elapsed = 0 
+
+    for n in parameters:
+        total_succesull = 0
+        for i in range(25):     #Run 25 simulations on every n
+            start = timer()
+            if (backtrack_alg(n)):
+                total_succesull += 1
+            
+            end = timer()
+            time_elapsed += end - start
+        
+        with open("BackTracking_Result.txt", "a") as f:
+            ##f.write(f"Using - N = {n}\n")
+            ##f.write(f"Took an average of {time_elapsed / 25} seconds with {total_succesull} perfect runs!\n\n")
+            f.write(f"{n}\n")
+            f.write(f"{time_elapsed/25}\n")
+
+        
+    return
 
 
 

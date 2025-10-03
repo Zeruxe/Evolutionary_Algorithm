@@ -190,7 +190,7 @@ def main():
         mutation_rate = mutate
         elites = elite_count
 
-        print(f"Starting simulation Using - N = {n} - pop_size = {population_size} - max_generations = {max_generations} - mutation_start_rate = {mutate} - elites = {elites}")
+        ##print(#f"Starting simulation Using - N = {n} - pop_size = {population_size} - max_generations = {max_generations} - mutation_start_rate = {mutate} - elites = {elites}")
 
         total_elapsed = 0
         total_successful = 0
@@ -207,8 +207,10 @@ def main():
             print(f"Simuation {i + 1} finished!")
 
         with open("Result.txt", "a") as f:
-            f.write(f"Using - N = {n} - pop_size = {population_size} - max_generations = {max_generations} - mutation_start_rate = {mutate} - elites = {elites}\n")
-            f.write(f"Took a average of {total_elapsed / 25} Seconds with {total_successful} perfect runs!\n\n")
+            #f.write(#f"Using - N = {n} - pop_size = {population_size} - max_generations = {max_generations} - mutation_start_rate = {mutate} - elites = {elites}\n")
+            #f.write(#f"Took a average of {total_elapsed / 25} Seconds with {total_successful} perfect runs!\n\n")
+            f.write(f"{n}\n")
+            f.write(f"{total_elapsed / 25}\n")
 
     return
 
@@ -222,13 +224,16 @@ parameters = [
             [15, 100, 500, 0.2, 2],
             [15, 100, 500, 0.1, 2],
             [15, 100, 500, 0.3, 2],
+            [18, 100, 500, 0.3, 2],
+            [19, 100, 500, 0.3, 2],
+            [20, 10, 500, 0.3, 2],
 
             # Mellan bräde
             [50, 100, 1000, 0.2, 4],
-            [50, 200, 1000, 0.2, 4],
+            ##[50, 200, 1000, 0.2, 4],
 
             # Stort bräde
-            [100, 200, 1500, 0.2, 6],
+            ##[100, 200, 1500, 0.2, 6],
             ]
 
 if __name__ == "__main__": 
