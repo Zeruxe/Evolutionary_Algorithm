@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 # Read results from BackTracking_Result.txt
 bt_n = []
 bt_time = []
-with open("BackTracking_Result.txt", "r") as f:
+with open("Results/PlotBackTracking.txt", "r") as f:
 	lines = [line.strip() for line in f if line.strip()]
 	for i in range(0, len(lines), 2):
 		bt_n.append(int(lines[i]))
@@ -18,7 +18,7 @@ plt.plot(bt_n, bt_time, marker='o', label='Backtracking Algorithm')
 alg_n = []
 alg_time = []
 
-with open("Result.txt", "r") as f:
+with open("Results/PlotEvolutionary_Algorithm.txt", "r") as f:
 	lines = [line.strip() for line in f if line.strip()]
 	for i in range(0, len(lines), 2):
 		alg_n.append(int(lines[i]))

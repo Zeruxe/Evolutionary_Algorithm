@@ -1,5 +1,5 @@
 import random
-import nqueens
+from evolutionary_algorithm import Board
 from timeit import default_timer as timer
 from collections import Counter
 
@@ -51,7 +51,7 @@ def backtrack_alg(n):
     current_backtracks = 0
 
     print(f"Calling backtrack_alg with n={n}")  # Debug print
-    new_board = nqueens.Board()
+    new_board = Board()
     new_board.board = [-1 for i in range(n)]
 
     if (placequeens(0, new_board.board)):
@@ -67,9 +67,9 @@ def backtrack_alg(n):
 def main():
 
     # Try different problemsizes n
-    parameters = [4, 8, 10, 12, 15, 17, 20]
+    parameters = [5, 10, 15, 20, 25]
 
-    open("BackTracking_Result.txt", "w").close()   
+    open("Results/PlotBackTracking.txt", "w").close()   
 
     time_elapsed = 0 
 
@@ -83,7 +83,7 @@ def main():
             end = timer()
             time_elapsed += end - start
         
-        with open("BackTracking_Result.txt", "a") as f:
+        with open("Results/PlotBackTracking.txt", "a") as f:
             ##f.write(f"Using - N = {n}\n")
             ##f.write(f"Took an average of {time_elapsed / 25} seconds with {total_succesull} perfect runs!\n\n")
             f.write(f"{n}\n")
