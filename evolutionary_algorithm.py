@@ -27,7 +27,7 @@ def evolutionary_algorithm(n, population_size, max_generations, mutation_rate, e
         population.append(curboard)
 
     for gen in range(max_generations):
-        population_fitness_sort(population)
+        population = population_fitness_sort(population)
 
         if population[0].boardfitness == max_fitness:
             print(f"Max fitness has been reached! {population[0].board}")
@@ -36,7 +36,21 @@ def evolutionary_algorithm(n, population_size, max_generations, mutation_rate, e
         if gens_since_improvement >= 25:
             mutation_rate = mutation_rate_increase(mutation_rate)
             gens_since_improvement = 0
-            create_freshboards(n, population, population_size)
+
+            newboards = []
+            newboardnumber = max(1, population_size // 10)
+            for _ in range(newboardnumber):
+                curboard = Board()
+                curboard.board = generate_board(n)
+                newboards.append(curboard)
+            
+            #for curboard in newboards:
+            #    curboard.boardfitness = fitness(curboard.board)
+
+            population[-newboardnumber:] = newboards
+            population = population_fitness_sort(population)
+
+            #population.sort(key=lambda x: x.boardfitness, reverse=True)
 
         if last_best_fitness != population[0].boardfitness:
             gens_since_improvement = 0
@@ -51,9 +65,9 @@ def evolutionary_algorithm(n, population_size, max_generations, mutation_rate, e
             c1 = Board(crossover(p1, p2, n))
             c2 = Board(crossover(p2, p1, n))
             if random.random() <= mutation_rate:
-                mutate(c1, n)
+                c1 = mutate(c1, n)
             if random.random() <= mutation_rate:
-                mutate(c2, n)
+                c2 = mutate(c2, n)
 
             new_population.append(c1)
             new_population.append(c2)

@@ -36,3 +36,4 @@ def mutate(curboard, n):
         column2 = random.randint(0, n - 1)
 
     curboard.board[column1], curboard.board[column2] = curboard.board[column2], curboard.board[column1]
+    return curboard

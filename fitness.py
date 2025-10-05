@@ -6,6 +6,8 @@ def population_fitness_sort(population):
 
     population.sort(key=lambda x: x.boardfitness, reverse=True)
 
+    return population
+
 
 # A function that given one of our boards. It returns the current fitness_score of that board.
 # The fitness score is how many queens that do not conflict with eachother.
