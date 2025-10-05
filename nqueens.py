@@ -70,19 +70,22 @@ def crossover(parent_1, parent_2):
 def mutate(curboard):
     column1 = random.randint(0, n - 1)
     column2 = random.randint(0, n - 1)
+
+    while column1 == column2:
+        column2 = random.randint(0, n - 1)
+
     curboard.board[column1], curboard.board[column2] = curboard.board[column2], curboard.board[column1]
-    return curboard
 
 
 # Given our entire board state, we return a pair of two boards that should be used to create two new boards.
 # We make sure to not pick the same board twice.
 def survival_off_the_fittest(population, k=3):
     # Sista verisionen verkar vara snabbast. Blir lixom ingen vikt i valen så de går väldigt snabbt
-    candidates = random.sample(population, k)
-    p1 = max(candidates, key=lambda b: b.boardfitness)
-    candidates = random.sample(population, k)
-    p2 = max(candidates, key=lambda b: b.boardfitness)
-    return p1, p2
+    candidates = random.sample(population, min(2 * k, len(population)))
+
+    candidates.sort(key=lambda x: x.boardfitness, reverse=True)
+
+    return candidates[0], candidates[1]
 
     # Testade detta som är samma sak men inbyggd i C
     return random.choices(population, weights=[b.boardfitness for b in population], k=2)
@@ -122,6 +125,11 @@ def mutation_rate_decay():
     mutation_rate = max(0.05, mutation_rate * 0.99)
 
 
+def mutation_rate_increase():
+    global mutation_rate
+    mutation_rate = min(mutation_rate * 1.5, 0.3)
+
+
 def fitness_probability(population):
     total_fitness = 0
 
@@ -145,28 +153,55 @@ def evolutionary_algorithm():
     max_fitness = n * (n - 1) // 2
     population = []
 
+    last_best_fitness = -1
+    gens_since_improvement = 0
+
     for _ in range(population_size):
         curboard = Board()
         curboard.board = generate_board(n)
         population.append(curboard)
 
-    for gen in range(max_generations):
+    for gen in range(1, max_generations):
         fitness_probability(population)
+
+        if gens_since_improvement >= 25:
+            mutation_rate_increase()
+            gens_since_improvement = 0
+
+            newboards = []
+            newboardnumber = max(1, population_size // 10)
+            for _ in range(newboardnumber):
+                curboard = Board()
+                curboard.board = generate_board(n)
+                newboards.append(curboard)
+            
+            population[-newboardnumber:] = newboards
+
+            fitness_probability(population)
 
         if population[0].boardfitness == max_fitness:
             print(f"Max fitness has been reached! {population[0].board}")
             return True
-            break
+
+        if last_best_fitness != population[0].boardfitness:
+            gens_since_improvement = 0
+        else:
+            gens_since_improvement += 1
+        last_best_fitness = population[0].boardfitness
 
         new_population = population[:elites]
 
         while len(new_population) < population_size:
             p1, p2 = survival_off_the_fittest(population)
             c1 = Board(crossover(p1, p2))
+            c2 = Board(crossover(p2, p1))
             if random.random() <= mutation_rate:
                 mutate(c1)
+            if random.random() <= mutation_rate:
+                mutate(c2)
 
             new_population.append(c1)
+            new_population.append(c2)
 
         population = new_population
         mutation_rate_decay()
@@ -181,7 +216,7 @@ def main():
     global mutation_rate
     global elites
 
-    open("Result.txt", "w").close()
+    open("Results/Evolutionary_Algorithm.txt", "w").close()
 
     for board_size, pop_size, generations, mutate, elite_count in parameters:
         n = board_size
@@ -206,11 +241,11 @@ def main():
             total_elapsed += end - start
             print(f"Simuation {i + 1} finished!")
 
-        with open("Result.txt", "a") as f:
-            #f.write(#f"Using - N = {n} - pop_size = {population_size} - max_generations = {max_generations} - mutation_start_rate = {mutate} - elites = {elites}\n")
-            #f.write(#f"Took a average of {total_elapsed / 25} Seconds with {total_successful} perfect runs!\n\n")
-            f.write(f"{n}\n")
-            f.write(f"{total_elapsed / 25}\n")
+        with open("Results/Evolutionary_Algorithm.txt", "a") as f:
+            f.write(f"Using - N = {n} - pop_size = {population_size} - max_generations = {max_generations} - mutation_start_rate = {mutate} - elites = {elites}\n")
+            f.write(f"Took a average of {total_elapsed / 25} Seconds with {total_successful} perfect runs!\n\n")
+            #f.write(f"{n}\n")
+            #f.write(f"{total_elapsed / 25}\n")
 
     return
 
@@ -226,14 +261,14 @@ parameters = [
             [15, 100, 500, 0.3, 2],
             [18, 100, 500, 0.3, 2],
             [19, 100, 500, 0.3, 2],
-            [20, 10, 500, 0.3, 2],
+            [20, 100, 500, 0.3, 2],
 
             # Mellan bräde
-            [50, 100, 1000, 0.2, 4],
-            ##[50, 200, 1000, 0.2, 4],
+            #[50, 100, 1000, 0.2, 4],
+            #[50, 200, 1000, 0.2, 4],
 
             # Stort bräde
-            ##[100, 200, 1500, 0.2, 6],
+            #[100, 200, 1500, 0.2, 6],
             ]
 
 if __name__ == "__main__": 
