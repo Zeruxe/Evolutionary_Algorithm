@@ -1,5 +1,5 @@
 import random
-from evolutionary_algorithm import Board
+from Main.evolutionary_algorithm import Board
 from timeit import default_timer as timer
 from collections import Counter
 

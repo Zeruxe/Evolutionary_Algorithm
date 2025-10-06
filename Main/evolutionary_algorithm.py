@@ -1,7 +1,7 @@
 import random
-from board_state import generate_board, crossover, mutate
-from fitness import population_fitness_sort, fitness
-from selection import survival_off_the_fittest
+from Main.board_state import generate_board, crossover, mutate
+from Main.fitness import population_fitness_sort, fitness
+from Main.selection import survival_off_the_fittest
 
 class Board:
     def __init__(self, board=None):

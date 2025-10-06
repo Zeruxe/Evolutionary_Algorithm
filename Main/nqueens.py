@@ -1,5 +1,5 @@
 from timeit import default_timer as timer
-from evolutionary_algorithm import evolutionary_algorithm
+from Main.evolutionary_algorithm import evolutionary_algorithm
 
 
 # Our values that we want to test in our simulation
