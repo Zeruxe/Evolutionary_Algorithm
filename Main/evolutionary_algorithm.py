@@ -1,7 +1,7 @@
 import random
-from Main.board_state import generate_board, crossover, mutate
-from Main.fitness import population_fitness_sort, fitness
-from Main.selection import survival_off_the_fittest
+from board_state import generate_board, crossover, mutate
+from fitness import population_fitness_sort, fitness
+from selection import survival_off_the_fittest
 
 class Board:
     def __init__(self, board=None):
@@ -43,14 +43,9 @@ def evolutionary_algorithm(n, population_size, max_generations, mutation_rate, e
                 curboard = Board()
                 curboard.board = generate_board(n)
                 newboards.append(curboard)
-            
-            #for curboard in newboards:
-            #    curboard.boardfitness = fitness(curboard.board)
 
             population[-newboardnumber:] = newboards
             population = population_fitness_sort(population)
-
-            #population.sort(key=lambda x: x.boardfitness, reverse=True)
 
         if last_best_fitness != population[0].boardfitness:
             gens_since_improvement = 0
@@ -75,22 +70,9 @@ def evolutionary_algorithm(n, population_size, max_generations, mutation_rate, e
         population = new_population
         mutation_rate = mutation_rate_decay(mutation_rate)
 
+    print(max_fitness, population[0].boardfitness)
+
     return False
-
-
-def create_freshboards(n, population, population_size):
-    newboards = []
-    newboardnumber = max(1, population_size // 10)
-    for _ in range(newboardnumber):
-        curboard = Board()
-        curboard.board = generate_board(n)
-        newboards.append(curboard)
-    
-    for curboard in newboards:
-        curboard.boardfitness = fitness(curboard.board)
-
-    population[-newboardnumber:] = newboards
-
 
 
 # Function that lowers the mutation_rate untill a set lower bound rate.
