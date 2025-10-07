@@ -30,7 +30,7 @@ def evolutionary_algorithm(n, population_size, max_generations, mutation_rate, e
         population = population_fitness_sort(population)
 
         if population[0].boardfitness == max_fitness:
-            print(f"Max fitness has been reached! {population[0].board}")
+            #print(f"Max fitness has been reached! {population[0].board}")
             return True
             
         if gens_since_improvement >= 25:
@@ -69,8 +69,6 @@ def evolutionary_algorithm(n, population_size, max_generations, mutation_rate, e
 
         population = new_population
         mutation_rate = mutation_rate_decay(mutation_rate)
-
-    print(max_fitness, population[0].boardfitness)
 
     return False
 
