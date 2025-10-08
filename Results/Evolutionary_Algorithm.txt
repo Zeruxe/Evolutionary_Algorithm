@@ -1,87 +1,18 @@
-Using - N = 10 - pop_size = 2 - max_generations = 100 - mutation_start_rate = 0.2 - elites = 2
-Took a average of 0.0011977930000102788 Seconds with 0 perfect runs!
+N = 5
+Took a average of 0.0001663999998709187 Seconds with 25 perfect runs!
 
-Using - N = 10 - pop_size = 4 - max_generations = 100 - mutation_start_rate = 0.2 - elites = 2
-Took a average of 0.0030796469999586407 Seconds with 19 perfect runs!
+N = 10
+Took a average of 0.023397563999751583 Seconds with 17 perfect runs!
 
-Using - N = 10 - pop_size = 6 - max_generations = 100 - mutation_start_rate = 0.2 - elites = 2
-Took a average of 0.004967634000095132 Seconds with 10 perfect runs!
+N = 25
+Took a average of 0.25585544800036586 Seconds with 11 perfect runs!
 
-Using - N = 10 - pop_size = 8 - max_generations = 100 - mutation_start_rate = 0.2 - elites = 2
-Took a average of 0.006123642000020481 Seconds with 25 perfect runs!
+N = 50
+Took a average of 1.1776693839998915 Seconds with 16 perfect runs!
 
-Using - N = 10 - pop_size = 10 - max_generations = 100 - mutation_start_rate = 0.2 - elites = 2
-Took a average of 0.007320301999989169 Seconds with 33 perfect runs!
+N = 100
+Took a average of 9.757846407999168 Seconds with 12 perfect runs!
 
-Using - N = 10 - pop_size = 20 - max_generations = 100 - mutation_start_rate = 0.2 - elites = 2
-Took a average of 0.01179482800002006 Seconds with 51 perfect runs!
-
-Using - N = 10 - pop_size = 30 - max_generations = 100 - mutation_start_rate = 0.2 - elites = 2
-Took a average of 0.017897387000048184 Seconds with 48 perfect runs!
-
-Using - N = 10 - pop_size = 40 - max_generations = 100 - mutation_start_rate = 0.2 - elites = 2
-Took a average of 0.0230096560000311 Seconds with 54 perfect runs!
-
-Using - N = 10 - pop_size = 50 - max_generations = 100 - mutation_start_rate = 0.2 - elites = 2
-Took a average of 0.022965966999945523 Seconds with 63 perfect runs!
-
-Using - N = 10 - pop_size = 60 - max_generations = 100 - mutation_start_rate = 0.2 - elites = 2
-Took a average of 0.019119109000075695 Seconds with 78 perfect runs!
-
-Using - N = 10 - pop_size = 70 - max_generations = 100 - mutation_start_rate = 0.2 - elites = 2
-Took a average of 0.023605725000161327 Seconds with 79 perfect runs!
-
-Using - N = 10 - pop_size = 80 - max_generations = 100 - mutation_start_rate = 0.2 - elites = 2
-Took a average of 0.028992729000128746 Seconds with 74 perfect runs!
-
-Using - N = 10 - pop_size = 90 - max_generations = 100 - mutation_start_rate = 0.2 - elites = 2
-Took a average of 0.025336481999893294 Seconds with 83 perfect runs!
-
-Using - N = 10 - pop_size = 100 - max_generations = 100 - mutation_start_rate = 0.2 - elites = 2
-Took a average of 0.021647662999985186 Seconds with 89 perfect runs!
-
-Using - N = 10 - pop_size = 110 - max_generations = 100 - mutation_start_rate = 0.2 - elites = 2
-Took a average of 0.015921110000126647 Seconds with 95 perfect runs!
-
-Using - N = 10 - pop_size = 120 - max_generations = 100 - mutation_start_rate = 0.2 - elites = 2
-Took a average of 0.021089496999957193 Seconds with 91 perfect runs!
-
-Using - N = 10 - pop_size = 130 - max_generations = 100 - mutation_start_rate = 0.2 - elites = 2
-Took a average of 0.019938145999931295 Seconds with 97 perfect runs!
-
-Using - N = 10 - pop_size = 140 - max_generations = 100 - mutation_start_rate = 0.2 - elites = 2
-Took a average of 0.020779290999962542 Seconds with 96 perfect runs!
-
-Using - N = 10 - pop_size = 150 - max_generations = 100 - mutation_start_rate = 0.2 - elites = 2
-Took a average of 0.020750662999998896 Seconds with 95 perfect runs!
-
-Using - N = 10 - pop_size = 160 - max_generations = 100 - mutation_start_rate = 0.2 - elites = 2
-Took a average of 0.01922242399990864 Seconds with 97 perfect runs!
-
-Using - N = 10 - pop_size = 170 - max_generations = 100 - mutation_start_rate = 0.2 - elites = 2
-Took a average of 0.019228605999996942 Seconds with 98 perfect runs!
-
-Using - N = 10 - pop_size = 180 - max_generations = 100 - mutation_start_rate = 0.2 - elites = 2
-Took a average of 0.020928103999976883 Seconds with 96 perfect runs!
-
-Using - N = 10 - pop_size = 190 - max_generations = 100 - mutation_start_rate = 0.2 - elites = 2
-Took a average of 0.017586029999984022 Seconds with 99 perfect runs!
-
-Using - N = 10 - pop_size = 200 - max_generations = 100 - mutation_start_rate = 0.2 - elites = 2
-Took a average of 0.017024502999938705 Seconds with 99 perfect runs!
-
-Using - N = 10 - pop_size = 210 - max_generations = 100 - mutation_start_rate = 0.2 - elites = 2
-Took a average of 0.01516758599997047 Seconds with 100 perfect runs!
-
-Using - N = 10 - pop_size = 220 - max_generations = 100 - mutation_start_rate = 0.2 - elites = 2
-Took a average of 0.016862239999936718 Seconds with 100 perfect runs!
-
-Using - N = 10 - pop_size = 230 - max_generations = 100 - mutation_start_rate = 0.2 - elites = 2
-Took a average of 0.016575623999997333 Seconds with 100 perfect runs!
-
-Using - N = 10 - pop_size = 240 - max_generations = 100 - mutation_start_rate = 0.2 - elites = 2
-Took a average of 0.016776528000009422 Seconds with 100 perfect runs!
-
-Using - N = 10 - pop_size = 250 - max_generations = 100 - mutation_start_rate = 0.2 - elites = 2
-Took a average of 0.018920479000098567 Seconds with 99 perfect runs!
+N = 250
+Took a average of 153.20269751999876 Seconds with 17 perfect runs!
 

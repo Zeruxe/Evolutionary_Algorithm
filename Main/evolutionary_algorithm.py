@@ -1,4 +1,5 @@
 import random
+import math
 from board_state import generate_board, crossover, mutate
 from fitness import population_fitness_sort, fitness
 from selection import survival_off_the_fittest
@@ -14,9 +15,14 @@ class Board:
     probability: float
 
 
-def evolutionary_algorithm(n, population_size, max_generations, mutation_rate, elites):
+def evolutionary_algorithm(n):
     max_fitness = n * (n - 1) // 2
     population = []
+
+    population_size = min(int(1.2 * n), 300)
+    max_generations = int(150 * math.log2(n))
+    elites = max(1, population_size // 50)
+    mutation_rate = 0.2
 
     last_best_fitness = -1
     gens_since_improvement = 0
@@ -30,22 +36,13 @@ def evolutionary_algorithm(n, population_size, max_generations, mutation_rate, e
         population = population_fitness_sort(population)
 
         if population[0].boardfitness == max_fitness:
-            #print(f"Max fitness has been reached! {population[0].board}")
+            print(f"Max fitness has been reached! {population[0].board}")
             return True
             
         if gens_since_improvement >= 25:
             mutation_rate = mutation_rate_increase(mutation_rate)
+            replace_bottom_boards(n, population, population_size)
             gens_since_improvement = 0
-
-            newboards = []
-            newboardnumber = max(1, population_size // 10)
-            for _ in range(newboardnumber):
-                curboard = Board()
-                curboard.board = generate_board(n)
-                newboards.append(curboard)
-
-            population[-newboardnumber:] = newboards
-            population = population_fitness_sort(population)
 
         if last_best_fitness != population[0].boardfitness:
             gens_since_improvement = 0
@@ -57,20 +54,36 @@ def evolutionary_algorithm(n, population_size, max_generations, mutation_rate, e
 
         while len(new_population) < population_size:
             p1, p2 = survival_off_the_fittest(population)
+
             c1 = Board(crossover(p1, p2, n))
-            c2 = Board(crossover(p2, p1, n))
             if random.random() <= mutation_rate:
                 c1 = mutate(c1, n)
+            new_population.append(c1)
+
+            if len(new_population) == population_size:
+                break
+
+            c2 = Board(crossover(p2, p1, n))
             if random.random() <= mutation_rate:
                 c2 = mutate(c2, n)
-
-            new_population.append(c1)
             new_population.append(c2)
 
         population = new_population
         mutation_rate = mutation_rate_decay(mutation_rate)
 
     return False
+
+
+def replace_bottom_boards(n, population, population_size):
+    newboards = []
+    newboardnumber = max(1, population_size // 10)
+    for _ in range(newboardnumber):
+        curboard = Board()
+        curboard.board = generate_board(n)
+        newboards.append(curboard)
+
+    population[-newboardnumber:] = newboards
+    population = population_fitness_sort(population)
 
 
 # Function that lowers the mutation_rate untill a set lower bound rate.
