@@ -4,6 +4,10 @@ from board_state import generate_board, crossover, mutate
 from fitness import population_fitness_sort, fitness
 from selection import survival_off_the_fittest
 
+
+best_solutions = []
+
+
 class Board:
     def __init__(self, board=None):
         self.board = board
@@ -16,6 +20,7 @@ class Board:
 
 
 def evolutionary_algorithm(n):
+
     max_fitness = n * (n - 1) // 2
     population = []
 
@@ -71,6 +76,7 @@ def evolutionary_algorithm(n):
         population = new_population
         mutation_rate = mutation_rate_decay(mutation_rate)
 
+    best_solutions.append(population[0].boardfitness)
     return False
 
 
@@ -94,3 +100,10 @@ def mutation_rate_decay(mutation_rate):
 # Function that increases the mutation_rate up to a maximum of 0.3.
 def mutation_rate_increase(mutation_rate):
     return min(mutation_rate * 2, 0.3)
+
+def get_all_solutions():
+    best_solutions.sort()
+    return best_solutions
+
+def clear_best_board():
+    best_solutions.clear()
