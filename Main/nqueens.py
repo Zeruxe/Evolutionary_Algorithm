@@ -6,7 +6,7 @@ from evolutionary_algorithm import get_all_solutions, clear_best_board
 # It will then run 25 simulations on the given parameters and print some (pretty bad output to a file)
 #            [n, population_size, max_generations, mutation_rate, elites]
 #parameters = [5, 10, 25, 50, 100, 250, 500, 1000]
-parameters = [5, 10, 25, 50, 100]
+parameters = [5, 10, 25, 50, 100, 125, 150, 175, 200]
 def main():
     open("../Results/Evolutionary_Algorithm.txt", "w").close()
     open("../Results/PlotEvolutionary_Algorithm.txt", "w").close()

@@ -24,8 +24,9 @@ def evolutionary_algorithm(n):
     max_fitness = n * (n - 1) // 2
     population = []
 
-    population_size = min(int(1.2 * n), 300)
-    max_generations = int(150 * math.log2(n))
+    population_size = min(int(1.2 * n), 300) # We pick a population size a little bigger than n, but we cap at 300 because of performance issues
+    max_generations = int(150 * math.log2(n)) # We make this logarithmic because we want the max generation size to grow rapidly for smaller n
+                                              # but then plan out for larger n values. 
     elites = max(1, population_size // 50)
     mutation_rate = 0.2
 

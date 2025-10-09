@@ -1,18 +1,27 @@
 N = 5
-Took a average of 0.0001663999998709187 Seconds with 25 perfect runs!
+Took a average of 0.00026674400025513025 Seconds with 25 perfect runs!
 
 N = 10
-Took a average of 0.023397563999751583 Seconds with 17 perfect runs!
+Took a average of 0.0394280320002872 Seconds with 12 perfect runs!
 
 N = 25
-Took a average of 0.25585544800036586 Seconds with 11 perfect runs!
+Took a average of 0.35005862799982423 Seconds with 9 perfect runs!
 
 N = 50
-Took a average of 1.1776693839998915 Seconds with 16 perfect runs!
+Took a average of 1.8035183400007373 Seconds with 12 perfect runs!
 
 N = 100
-Took a average of 9.757846407999168 Seconds with 12 perfect runs!
+Took a average of 10.693475063999795 Seconds with 11 perfect runs!
 
-N = 250
-Took a average of 153.20269751999876 Seconds with 17 perfect runs!
+N = 125
+Took a average of 19.788260443999754 Seconds with 13 perfect runs!
+
+N = 150
+Took a average of 28.083589312000402 Seconds with 19 perfect runs!
+
+N = 175
+Took a average of 51.17696098800021 Seconds with 10 perfect runs!
+
+N = 200
+Took a average of 65.76199764400008 Seconds with 21 perfect runs!
 
