@@ -7,35 +7,12 @@ from evolutionary_algorithm import evolutionary_algorithm
 #            [n, population_size, max_generations, mutation_rate, elites]
 parameters = [
             # Små Bräden
-            [10, 2, 100, 0.2, 2],
-            [10, 4, 100, 0.2, 2],
-            [10, 6, 100, 0.2, 2],
-            [10, 8, 100, 0.2, 2],
-            [10, 10, 100, 0.2, 2],
-            [10, 20, 100, 0.2, 2],
-            [10, 30, 100, 0.2, 2],
-            [10, 40, 100, 0.2, 2],
-            [10, 50, 100, 0.2, 2],
-            [10, 60, 100, 0.2, 2],
-            [10, 70, 100, 0.2, 2],
-            [10, 80, 100, 0.2, 2],
-            [10, 90, 100, 0.2, 2],
-            [10, 100, 100, 0.2, 2],
-            [10, 110, 100, 0.2, 2],
-            [10, 120, 100, 0.2, 2],
-            [10, 130, 100, 0.2, 2],
-            [10, 140, 100, 0.2, 2],
-            [10, 150, 100, 0.2, 2],
-            [10, 160, 100, 0.2, 2],
-            [10, 170, 100, 0.2, 2],
-            [10, 180, 100, 0.2, 2],
-            [10, 190, 100, 0.2, 2],
-            [10, 200, 100, 0.2, 2],
-            [10, 210, 100, 0.2, 2],
-            [10, 220, 100, 0.2, 2],
-            [10, 230, 100, 0.2, 2],
-            [10, 240, 100, 0.2, 2],
-            [10, 250, 100, 0.2, 2],
+            [10, 20, 200, 0.2, 1],
+            [20, 40, 225, 0.2, 1],
+            [30, 60, 250, 0.2, 1],
+            [40, 80, 275, 0.2, 1],
+            [50, 100, 300, 0.2, 1],
+
             #[10, 400, 250, 0.3, 2],
             #[15, 400, 250, 0.3, 2],
             #[20, 400, 250, 0.3, 2],
@@ -63,7 +40,7 @@ def main():
         total_elapsed = 0
         total_successful = 0
 
-        for i in range(25):
+        for i in range(10):
             start = timer()
 
             if evolutionary_algorithm(n, population_size, max_generations, mutation_rate, elites_count):
@@ -76,11 +53,11 @@ def main():
 
         with open("Results/Evolutionary_Algorithm.txt", "a") as f:
             f.write(f"Using - N = {n} - pop_size = {population_size} - max_generations = {max_generations} - mutation_start_rate = {mutation_rate} - elites = {elites_count}\n")
-            f.write(f"Took a average of {total_elapsed / 25} Seconds with {total_successful} perfect runs!\n\n")
+            f.write(f"Took a average of {total_elapsed / 10} Seconds with {total_successful} perfect runs!\n\n")
 
         with open("Results/PlotEvolutionary_Algorithm.txt", "a") as f:
             f.write(f"{n}\n")
-            f.write(f"{total_elapsed/25}\n")
+            f.write(f"{total_elapsed/10}\n")
 
 def GetBestParametersForN(n):
     p_size = list(range(10, 101, 10)) + list(range(150, 501, 50))
@@ -110,5 +87,4 @@ def GetBestParametersForN(n):
 
 
 # Byt mellan dessa main() är vanliga grejen och den andra testar massa parametrar.
-#main()
-GetBestParametersForN(15)
+main()
